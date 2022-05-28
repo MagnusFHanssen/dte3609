@@ -13,10 +13,18 @@ void GameManager::privateInit()
   // Set default OpenGL states
   glEnable(GL_CULL_FACE);
 
+  // Insert light for old GL
+  GLfloat light_dir[] = {0.2f, 1.0f, -0.3f, 0.0f};
+  glLightfv(GL_LIGHT0, GL_POSITION, light_dir);
+
+  GLfloat ambient[] = {0.4f, 0.4f, 0.4f};
+
+  glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+
   // Adding the camera to the scene
   cam_.reset(new Camera());
 
-  ls_.reset(new Landscape());
+  ls_.reset(new Landscape(10.0f));
   this->addSubObject(ls_);
 
   character_.reset(new Character());
@@ -39,4 +47,8 @@ void GameManager::privateUpdate()
 std::shared_ptr<Camera> GameManager::getCam()
 {
   return cam_;
+}
+std::shared_ptr<Character> GameManager::getMC()
+{
+    return character_;
 }

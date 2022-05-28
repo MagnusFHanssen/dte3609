@@ -26,6 +26,7 @@ class Camera : public SceneObject
 		void privateUpdate();
 
 	private:
+        float speed;
   
 };
 

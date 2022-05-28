@@ -16,6 +16,7 @@ class GameManager : public SceneObject
 		~GameManager();
     
     std::shared_ptr<Camera> getCam();
+    std::shared_ptr<Character> getMC();
 
   protected:
     virtual void privateInit();

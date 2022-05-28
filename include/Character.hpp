@@ -8,8 +8,11 @@
 class Character : public SceneObject
 {
 	public:
-        Character();
+        Character(float xPos = 0.0f, float yPos = 2.0f);
         ~Character();
+
+        void moveLeft();
+        void moveRight();
 
   protected:
     void privateInit();
@@ -20,6 +23,20 @@ class Character : public SceneObject
 	  float speed_;
     float life_;
     float armor_;
+
+    float turnRate_;
+
+    float _xPos;
+    float _yPos;
+
+    float _rotation;
+
+    float scale_;
+
+    GLuint dList_;
+    GLuint dNormal_;
+
+
     
 };
 

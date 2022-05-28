@@ -11,17 +11,22 @@
 class Landscape : public SceneObject
 {
 	public:
-        Landscape();
+        Landscape(float initialDistance = 0.0f);
         ~Landscape();
 
   protected:
-    virtual void privateInit();
+        virtual void privateInit();
 		virtual void privateRender();
 		virtual void privateUpdate();
 
 	private:
-    std::vector< glm::vec3 > vertexArray_; // Maybe two-dim vector and several arrays
-    // normal array.
-    // texture coord array
+        float width;
+        float length;
+        float distance;
+        float rise_;
+
+        std::vector< glm::vec3 > vertexArray_; // Maybe two-dim vector and several arrays
+        // normal array.
+        // texture coord array
 };
 
