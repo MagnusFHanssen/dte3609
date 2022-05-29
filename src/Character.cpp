@@ -21,6 +21,10 @@ void Character::privateInit()
 
     scale_ = 2.0f;
 
+    maxLife_ = 10.0f;
+    life_ = maxLife_;
+    armor_ = 0.0f;
+
 
     GLfloat const verts[8][3] = {{scale_, -scale_, scale_},
                            {scale_, scale_, scale_},
@@ -220,6 +224,21 @@ void Character::moveRight()
 
     //_rotation -= turnRate_;
 }
+
+float Character::getLife(){return life_;}
+
+float Character::doDamage(float damage){
+    life_ -= (damage - armor_);
+    return life_;
+}
+
+void Character::setLife(float life){life_ = life;}
+
+void Character::fullHeal(){life_ = maxLife_;}
+
+void Character::setMaxLife(float life){maxLife_ = life;}
+
+float Character::getMaxLife(){return maxLife_;}
 
 bool Character::loadTextures()
 {

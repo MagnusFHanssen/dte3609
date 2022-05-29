@@ -35,6 +35,8 @@ void init()
 
   for(int i=0; i<30; i++)
     keyPressed[i]=false;
+
+
 }
 
 void display()

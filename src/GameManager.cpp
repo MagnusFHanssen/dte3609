@@ -1,4 +1,6 @@
 #include "../include/GameManager.hpp"
+#include <string.h>
+//#include <format>
 
 GameManager::GameManager()
 {
@@ -45,6 +47,12 @@ void GameManager::privateInit()
   particle_.reset(new Particle({0.0f, 40.0f, 0.0f}, {0.0f, -2.0f, 0.0f}));
   this->addSubObject(particle_);
 
+  char life[20];
+  snprintf(life, sizeof(life), "Life: %.1f / %.1f", character_->getLife(), character_->getMaxLife());
+  text_.reset(new Text(std::string(life), {20.0f, 20.0f, 10.0f}, GLUT_STROKE_ROMAN, STROKE_CHAR, {1.0f, 0.0f, 0.0f}));
+  this->addSubObject(text_);
+
+
 }
 
 void GameManager::privateRender()
@@ -57,6 +65,9 @@ void GameManager::privateUpdate()
   // Instead of adding alle objects in the scene as subobject to the camera they are added as subobjects
   // to the game manager. Therefore, we set the game manager matrix equal to the camera matrix. 
   this->matrix_ = cam_->getMatrix();
+    char life[20];
+    snprintf(life, sizeof(life), "Life: %.1f / %.1f", character_->getLife(), character_->getMaxLife());
+    text_->setString(std::string(life));
 }
 
 std::shared_ptr<Camera> GameManager::getCam()

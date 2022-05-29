@@ -14,6 +14,15 @@ class Character : public SceneObject
         void moveLeft();
         void moveRight();
 
+        float getLife();
+        float doDamage(float damage);
+        void fullHeal();
+        void setLife(float life);
+
+        void setMaxLife(float life);
+        float getMaxLife();
+
+
   protected:
     void privateInit();
 		void privateRender();
@@ -23,6 +32,7 @@ class Character : public SceneObject
         bool loadTextures();
 
 	  float speed_;
+      float maxLife_;
     float life_;
     float armor_;
 
