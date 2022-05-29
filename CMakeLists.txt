@@ -41,6 +41,7 @@ set( INCLUDE
 	include/Input.hpp
 	include/SceneObject.hpp
         include/Character.hpp
+        include/Billboard.hpp
 )
 set( SRCS
         src/Landscape.cpp
@@ -48,6 +49,7 @@ set( SRCS
 	src/GameManager.cpp
 	src/SceneObject.cpp
         src/Character.cpp
+        src/Billboard.cpp
 	
 	app/main.cpp
 )

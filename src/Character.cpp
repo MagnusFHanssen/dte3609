@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../include/stb_image.h"
+#include "../../glm-master/glm/gtc/matrix_transform.hpp"
 
 Character::Character(float xPos, float yPos) : _xPos(xPos), _yPos(yPos)
 {
@@ -15,7 +16,7 @@ Character::~Character()
 
 void Character::privateInit()
 {
-    turnRate_ = 0.01f;
+    turnRate_ = 10.0f;
     _rotation = 0.0f;
 
     scale_ = 2.0f;
@@ -137,6 +138,11 @@ void Character::privateInit()
 
     texLoaded_ = loadTextures();
 
+    // Translation:
+    matrix_ = glm::translate(matrix_, {_xPos, _yPos, 0.0f});
+    matrix_ = glm::rotate(matrix_, _rotation, {0.0f, 1.0f, 0.0f});
+
+
 }
 
 void Character::privateRender()
@@ -156,9 +162,9 @@ void Character::privateRender()
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    glMatrixMode(GL_MODELVIEW);
-    glTranslatef(_xPos, _yPos, 0.0f);
-    glRotatef(_rotation, 0.0f, 1.0f, 0.0f);
+    //glMatrixMode(GL_MODELVIEW);
+    //glTranslatef(_xPos, _yPos, 0.0f);
+    //glRotatef(_rotation, 0.0f, 1.0f, 0.0f);
 
     if (texLoaded_){
         glEnable(GL_TEXTURE_2D);
@@ -199,16 +205,20 @@ void Character::privateUpdate()
 
 void Character::moveLeft()
 {
-    //_xPos -= turnRate_;
+    float increment = turnRate_/this->fps_;
+    _xPos -= increment;
+    matrix_ = glm::translate(matrix_, {-increment, 0.0f, 0.0f});
 
-    _rotation += turnRate_;
+    //_rotation += turnRate_;
 }
 
 void Character::moveRight()
 {
-    //_xPos += turnRate_;
+    float increment = turnRate_/this->fps_;
+    _xPos += increment;
+    matrix_ = glm::translate(matrix_, {increment, 0.0f, 0.0f});
 
-    _rotation -= turnRate_;
+    //_rotation -= turnRate_;
 }
 
 bool Character::loadTextures()

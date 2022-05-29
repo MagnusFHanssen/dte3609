@@ -69,7 +69,7 @@ inline double FpsCounter::elapsed() {
 }
 
 inline unsigned long long FpsCounter::frames() {
-	return frames_;
+        return ++frames_;
 }
 
 inline double FpsCounter::fps() {

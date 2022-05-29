@@ -12,6 +12,7 @@ void GameManager::privateInit()
 {
   // Set default OpenGL states
   glEnable(GL_CULL_FACE);
+  glEnable(GL_LINEAR_MIPMAP_LINEAR);
 
   // Insert light for old GL
   GLfloat light_dir[] = {0.2f, 1.0f, -0.3f, 0.0f};
@@ -29,6 +30,9 @@ void GameManager::privateInit()
 
   character_.reset(new Character());
   this->addSubObject(character_);
+
+  bboard_.reset(new Billboard(4.0f, 1.0f, glm::vec3(0.0f, 3.0f, 0.0f), character_, cam_));
+  this->addSubObject(bboard_);
 
 }
 
