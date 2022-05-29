@@ -42,6 +42,7 @@ set( INCLUDE
 	include/SceneObject.hpp
         include/Character.hpp
         include/Billboard.hpp
+        include/Particle.hpp
 )
 set( SRCS
         src/Landscape.cpp
@@ -50,6 +51,7 @@ set( SRCS
 	src/SceneObject.cpp
         src/Character.cpp
         src/Billboard.cpp
+        src/Particle.cpp
 	
 	app/main.cpp
 )

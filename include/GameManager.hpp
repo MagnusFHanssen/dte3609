@@ -9,6 +9,7 @@
 #include "Character.hpp"
 #include "Camera.hpp"
 #include "Billboard.hpp"
+#include "Particle.hpp"
 
 class GameManager : public SceneObject
 {
@@ -29,5 +30,6 @@ class GameManager : public SceneObject
     std::shared_ptr<Character> character_;
     std::shared_ptr<Camera> cam_;
     std::shared_ptr<Billboard> bboard_;
+    std::shared_ptr<Particle> particle_;
 };
 

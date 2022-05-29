@@ -42,6 +42,9 @@ void GameManager::privateInit()
   bboard_.reset(new Billboard(4.0f, 1.0f, glm::vec3(0.0f, 3.0f, 0.0f), character_, cam_));
   this->addSubObject(bboard_);
 
+  particle_.reset(new Particle({0.0f, 40.0f, 0.0f}, {0.0f, -2.0f, 0.0f}));
+  this->addSubObject(particle_);
+
 }
 
 void GameManager::privateRender()
