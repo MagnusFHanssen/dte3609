@@ -14,6 +14,14 @@ void GameManager::privateInit()
   glEnable(GL_CULL_FACE);
   glEnable(GL_LINEAR_MIPMAP_LINEAR);
 
+  // Fog stuff
+  glEnable(GL_FOG);
+
+  GLfloat fogColor[] {0.9f, 0.9f, 0.9f, 1.0f};
+  glFogfv(GL_FOG_COLOR, fogColor);
+  glFogf(GL_FOG_DENSITY, 0.01f);
+  glFogi(GL_FOG_MODE, GL_EXP);
+
   // Insert light for old GL
   GLfloat light_dir[] = {0.2f, 1.0f, -0.3f, 0.0f};
   glLightfv(GL_LIGHT0, GL_POSITION, light_dir);

@@ -24,7 +24,7 @@ float moveX, moveY;
 
 void init()
 {
-  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glClearColor(0.7, 0.7, 1.0, 0.0);
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
 

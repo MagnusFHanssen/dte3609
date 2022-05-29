@@ -44,10 +44,6 @@ void Landscape::privateInit()
 
 void Landscape::privateRender()
 {
-  glMatrixMode(GL_MODELVIEW);
-  glTranslatef(0.0f, 0.0f, distance);
-
-
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
 
@@ -65,21 +61,31 @@ void Landscape::privateRender()
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glTexCoordPointer(2, GL_FLOAT, 0, &texCoordArray_.front().s);
 
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(1.0f, 1.0f);
 
   glEnable(GL_AUTO_NORMAL);
   glDrawArrays(GL_QUADS, 0, 12);
   glDisable(GL_AUTO_NORMAL);
 
-
-  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-  glDisableClientState(GL_VERTEX_ARRAY);
-
   glBindTexture(GL_TEXTURE_2D, NULL);
   glDisable(GL_TEXTURE_2D);
 
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisable(GL_COLOR_MATERIAL);
   glDisable(GL_LIGHT0);
   glDisable(GL_LIGHTING);
+
+
+  glColor3f(0.9f, 0.1f, 0.1f);
+
+  glDrawArrays(GL_LINE_STRIP, 0, 12);
+
+  glDisable(GL_POLYGON_OFFSET_FILL);
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+
 }
 
 void Landscape::privateUpdate()
