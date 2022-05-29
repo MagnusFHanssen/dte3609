@@ -20,6 +20,8 @@ class Landscape : public SceneObject
 		virtual void privateUpdate();
 
 	private:
+        bool loadTextures();
+
         float width;
         float length;
         float distance;
@@ -27,6 +29,12 @@ class Landscape : public SceneObject
 
         std::vector< glm::vec3 > vertexArray_; // Maybe two-dim vector and several arrays
         // normal array.
+        std::vector< glm::vec3 > normalArray_;
         // texture coord array
+        std::vector< glm::vec2 > texCoordArray_;
+
+        GLuint texName_;
+
+        bool texLoaded_;
 };
 

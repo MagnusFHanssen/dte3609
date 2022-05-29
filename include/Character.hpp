@@ -20,6 +20,8 @@ class Character : public SceneObject
 		void privateUpdate();
 
 	private:
+        bool loadTextures();
+
 	  float speed_;
     float life_;
     float armor_;
@@ -35,6 +37,10 @@ class Character : public SceneObject
 
     GLuint dList_;
     GLuint dNormal_;
+
+    GLuint texName_;
+
+    bool texLoaded_;
 
 
     
