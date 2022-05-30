@@ -1,9 +1,6 @@
 #pragma once
 
 #include <windows.h>
-#include <GL/GL.h>
-#include <GL/GLU.h>
-
 #include "SceneObject.hpp"
 #include "Camera.hpp"
 

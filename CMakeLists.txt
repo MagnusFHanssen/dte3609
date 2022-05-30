@@ -46,6 +46,8 @@ set( INCLUDE
         include/Text.hpp
         include/ColSphereBody.hpp
         include/Minimap.hpp
+        include/Shader.hpp
+        include/Skybox.hpp
 
         include/glext.h
 )
@@ -59,6 +61,8 @@ set( SRCS
         src/Particle.cpp
         src/Text.cpp
         src/Minimap.cpp
+        src/Shader.cpp
+        src/Skybox.cpp
 	
 	app/main.cpp
 )

@@ -1,14 +1,13 @@
 #pragma once
 
 #include <windows.h>
-#include <GL/GL.h>
-#include <GL/GLU.h>
-#include <GL/glut.h>
+#include "SceneObject.hpp"
+
 #include <string>
 
 #include "../../glm-master/glm/gtc/matrix_transform.hpp"
 
-#include "SceneObject.hpp"
+
 
 // Character types:
 int const STROKE_CHAR = 0;

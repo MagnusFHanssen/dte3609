@@ -1,8 +1,6 @@
 #pragma once
 
 #include <windows.h>
-#include <gl/GL.h>
-#include <gl/GLU.h>
 
 //#include "SceneObject.hpp"
 #include "../../glm-master/glm/glm.hpp"

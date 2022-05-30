@@ -19,6 +19,11 @@ void GameManager::privateInit()
   // Fog stuff
   glEnable(GL_FOG);
 
+  sunPos = {20.0f, 100.0f, -30.0f};
+
+  // Adding shaders
+  addShader("Skybox");
+
   GLfloat fogColor[] {0.9f, 0.9f, 0.9f, 1.0f};
   glFogfv(GL_FOG_COLOR, fogColor);
   glFogf(GL_FOG_DENSITY, 0.01f);
@@ -57,6 +62,10 @@ void GameManager::privateInit()
   mapList_.push_back(ls_);
   mapList_.push_back(character_);
 
+  // Objects post Shader
+  skybox_.reset(new Skybox(getShaderPtr("Skybox")));
+  this->addSubObject(skybox_);
+
 }
 
 void GameManager::privateRender()
@@ -83,4 +92,21 @@ std::shared_ptr<Camera> GameManager::getCam()
 std::shared_ptr<Character> GameManager::getMC()
 {
     return character_;
+}
+
+void GameManager::addShader(std::string name){
+    auto shader = new Shader();
+
+    std::string  path = "./resources/shaders/";
+    path.append(name);
+
+    char *p = &path[0];
+    shader->initShaders(p);
+    shaders_[name] = *shader;
+}
+
+std::shared_ptr<Shader> GameManager::getShaderPtr(std::string name){
+    std::shared_ptr<Shader> ptr(nullptr);
+    ptr = std::make_shared<Shader>(shaders_[name]);
+    return ptr;
 }

@@ -2,7 +2,16 @@
 
 #include <memory>
 #include <vector>
+#include <gl/glew.h>
+#include <gl/GL.h>
+#include <gl/GLU.h>
+#include <GL/freeglut.h>
+
 #include "../../glm-master/glm/glm.hpp"
+
+#include "Shader.hpp"
+
+#include <string>
 
 // The SceneObject class is the parent of all objects in the scene graph.
 // To make an object to use in the scene graph, inherit this class and
@@ -53,6 +62,15 @@ class SceneObject
   void setMatrix(const glm::mat4& m) { matrix_ = m; }
   glm::mat4& getMatrix() { return matrix_; }
 
+  void updateViewMatrix(glm::mat4 matrix);
+  void updateProjectionMatrix(glm::mat4 matrix);
+
+  // Shader methods to simplify assigning uniforms
+  void assignUniformInt(const GLchar* name, int i, std::shared_ptr<Shader> shader);
+  void assignUniformFloat(const GLchar* name, float f, std::shared_ptr<Shader> shader);
+  void assignUniformV3(const GLchar* name, const glm::vec3 &vec, std::shared_ptr<Shader> shader);
+  void assignUniformM4(const GLchar* name, const glm::mat4 &mat, std::shared_ptr<Shader> shader);
+
  protected:
   // Override this method with your own render-implementation.
   virtual void privateRender() {}
@@ -68,6 +86,10 @@ class SceneObject
   // This is the transformation-matrix of the scene object.
   // Relative to the object's parent. Defaults to the identity matrix.
   glm::mat4 matrix_;
+
+  // New stuff
+  glm::mat4 projectionMatrix_;
+  glm::mat4 viewMatrix_;
 
  private:
   // List of all SceneObjects that belong to the current object.

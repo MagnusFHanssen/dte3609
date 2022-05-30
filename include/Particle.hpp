@@ -1,12 +1,11 @@
 #pragma once
 
 #include <windows.h>
-#include <GL/GL.h>
-#include <GL/GLU.h>
+#include "SceneObject.hpp"
 
 #include "../../glm-master/glm/gtc/matrix_transform.hpp"
 
-#include "SceneObject.hpp"
+
 #include "Camera.hpp"
 
 #include <string>
