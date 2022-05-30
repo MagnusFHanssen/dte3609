@@ -33,5 +33,8 @@ class GameManager : public SceneObject
     std::shared_ptr<Billboard> bboard_;
     std::shared_ptr<Particle> particle_;
     std::shared_ptr<Text> text_;
+
+    std::vector<std::shared_ptr<SceneObject>> mapList_;
+
 };
 

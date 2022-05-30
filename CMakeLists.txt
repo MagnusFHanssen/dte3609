@@ -45,6 +45,9 @@ set( INCLUDE
         include/Particle.hpp
         include/Text.hpp
         include/ColSphereBody.hpp
+        include/Minimap.hpp
+
+        include/glext.h
 )
 set( SRCS
         src/Landscape.cpp
@@ -55,6 +58,7 @@ set( SRCS
         src/Billboard.cpp
         src/Particle.cpp
         src/Text.cpp
+        src/Minimap.cpp
 	
 	app/main.cpp
 )

@@ -54,6 +54,9 @@ void GameManager::privateInit()
 
   ls_->setSpeedZ(10.0f);
 
+  mapList_.push_back(ls_);
+  mapList_.push_back(character_);
+
 }
 
 void GameManager::privateRender()

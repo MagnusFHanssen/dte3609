@@ -1,6 +1,8 @@
 
 #include <windows.h>
+#include <gl/glew.h>
 #include <GL/freeglut.h>
+#include "../include/glext.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
@@ -24,6 +26,11 @@ float moveX, moveY;
 
 void init()
 {
+    GLenum err = glewInit();
+    if (err != GL_NO_ERROR)
+      std::cout<< "OpenGL error: " << gluErrorString(err) << std::endl;
+    std::cout.flush();
+
   glClearColor(0.7, 0.7, 1.0, 0.0);
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
