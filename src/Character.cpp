@@ -7,7 +7,8 @@
 
 Character::Character(float xPos, float yPos) : _xPos(xPos), _yPos(yPos)
 {
-
+    gravity = {0.0f, -9.81f, 0.0f};
+    attached = false;
 }
 
 Character::~Character()
@@ -225,6 +226,12 @@ void Character::moveRight()
     //_rotation -= turnRate_;
 }
 
+void Character::setYPos(float yPos){
+    auto diff = yPos - _yPos;
+    matrix_ = glm::translate(matrix_, {0.0f, diff, 0.0f});
+    _yPos = yPos;
+}
+
 float Character::getLife(){return life_;}
 
 float Character::doDamage(float damage){
@@ -268,3 +275,10 @@ bool Character::loadTextures()
     return true;
 }
 
+glm::vec3 Character::getWorldPos() const{
+    return {_xPos, _yPos, 0.0f};
+}
+
+float Character::getRadius() const{
+    return scale_;
+}

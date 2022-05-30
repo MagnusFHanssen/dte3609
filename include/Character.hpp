@@ -1,11 +1,12 @@
 #pragma once
 
 #include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include "SceneObject.hpp"
+#include "ColSphereBody.hpp"
 
-class Character : public SceneObject
+class Character : public SceneObject, public ColSphereBody
 {
 	public:
         Character(float xPos = 0.0f, float yPos = 2.0f);
@@ -14,6 +15,8 @@ class Character : public SceneObject
         void moveLeft();
         void moveRight();
 
+        void setYPos(float yPos);
+
         float getLife();
         float doDamage(float damage);
         void fullHeal();
@@ -21,6 +24,9 @@ class Character : public SceneObject
 
         void setMaxLife(float life);
         float getMaxLife();
+
+        glm::vec3 getWorldPos() const;
+        float getRadius() const;
 
 
   protected:

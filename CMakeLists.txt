@@ -44,6 +44,7 @@ set( INCLUDE
         include/Billboard.hpp
         include/Particle.hpp
         include/Text.hpp
+        include/ColSphereBody.hpp
 )
 set( SRCS
         src/Landscape.cpp

@@ -8,11 +8,18 @@
 #include "SceneObject.hpp"
 #include "../../glm-master/glm/glm.hpp"
 
+#include "ColSphereBody.hpp"
+
 class Landscape : public SceneObject
 {
 	public:
-        Landscape(float initialDistance = 0.0f);
+        Landscape(float initialDistance = 0.0f, int repeats = 3);
         ~Landscape();
+
+        bool detectCollision(const ColSphereBody& target) const;
+        float getHeightY(const ColSphereBody& target) const;
+
+        void setSpeedZ(float speed);
 
   protected:
         virtual void privateInit();
@@ -36,5 +43,8 @@ class Landscape : public SceneObject
         GLuint texName_;
 
         bool texLoaded_;
+
+        int repeats_;
+        float speed_ = 0.0f;
 };
 

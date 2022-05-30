@@ -52,6 +52,7 @@ void GameManager::privateInit()
   text_.reset(new Text(std::string(life), {20.0f, 20.0f, 10.0f}, GLUT_STROKE_ROMAN, STROKE_CHAR, {1.0f, 0.0f, 0.0f}));
   this->addSubObject(text_);
 
+  ls_->setSpeedZ(10.0f);
 
 }
 
@@ -68,6 +69,8 @@ void GameManager::privateUpdate()
     char life[20];
     snprintf(life, sizeof(life), "Life: %.1f / %.1f", character_->getLife(), character_->getMaxLife());
     text_->setString(std::string(life));
+
+    character_->setYPos(ls_->getHeightY(*character_));
 }
 
 std::shared_ptr<Camera> GameManager::getCam()

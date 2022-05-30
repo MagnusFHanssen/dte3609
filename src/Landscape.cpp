@@ -1,7 +1,11 @@
 #include "../include/Landscape.hpp"
 #include "../include/stb_image.h"
+#include "../../glm-master/glm/gtc/matrix_transform.hpp"
 
-Landscape::Landscape(float initialDistance) : distance(initialDistance)
+#include <cmath>
+
+
+Landscape::Landscape(float initialDistance, int repeats) : distance(initialDistance), repeats_{repeats}
 {
 }
 
@@ -40,6 +44,8 @@ void Landscape::privateInit()
     for (auto vec : vertexArray_){
         texCoordArray_.emplace_back(glm::vec2(vec.x/texScaleFactor, vec.z/texScaleFactor));
     }
+
+    matrix_ = glm::translate(matrix_, {0.0f, 0.0f, distance});
 }
 
 void Landscape::privateRender()
@@ -63,9 +69,17 @@ void Landscape::privateRender()
 
   glEnable(GL_POLYGON_OFFSET_FILL);
   glPolygonOffset(1.0f, 1.0f);
-
   glEnable(GL_AUTO_NORMAL);
-  glDrawArrays(GL_QUADS, 0, 12);
+
+  auto old_matrix = matrix_;
+  matrix_ = glm::translate(matrix_, {0.0f, 0.0f, -length});
+
+  //for (int i = 0; i < repeats_; i++){
+      glDrawArrays(GL_QUADS, 0, 12);
+  //    matrix_ = glm::translate(matrix_, {0.0f, 0.0f, length});
+  //}
+  matrix_ = old_matrix;
+
   glDisable(GL_AUTO_NORMAL);
 
   glBindTexture(GL_TEXTURE_2D, NULL);
@@ -79,7 +93,7 @@ void Landscape::privateRender()
 
   glColor3f(0.9f, 0.1f, 0.1f);
 
-  glDrawArrays(GL_LINE_STRIP, 0, 12);
+  //glDrawArrays(GL_LINE_STRIP, 0, 12);
 
   glDisable(GL_POLYGON_OFFSET_FILL);
 
@@ -90,9 +104,12 @@ void Landscape::privateRender()
 
 void Landscape::privateUpdate()
 {
-    //distance += 0.01f;
-    if (distance >= length * 2){
-        distance -= length * 3;
+    float increment = speed_/this->fps_;
+    distance += increment;
+    matrix_ = glm::translate(matrix_, {0.0f, 0.0f, increment});
+    if (distance >= length){
+        distance -= length;
+        matrix_ = glm::translate(matrix_, {0.0f, 0.0f, - length});
     }
 }
 
@@ -124,3 +141,24 @@ bool Landscape::loadTextures()
     return true;
 }
 
+void Landscape::setSpeedZ(float speed){speed_ = speed;}
+
+float Landscape::getHeightY(const ColSphereBody& target) const{
+    auto zDist = distance - target.getWorldPos().z;
+
+    // Put zDist in the correct domain, since the height is periodic
+    while(zDist < 0.0f)
+        zDist += length;
+    while(zDist >= length)
+        zDist -= length;
+
+    float groundLevel;
+
+    if(zDist <= length/3.0f){
+        groundLevel = 0.0f;
+    }else{
+        groundLevel = rise_ * (1.0 - 3.0f*abs(zDist/length - 2.0f/3.0f));
+    }
+
+    return groundLevel + target.getRadius();
+}
