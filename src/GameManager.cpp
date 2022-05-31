@@ -14,7 +14,7 @@ void GameManager::privateInit()
 {
   // Set default OpenGL states
   glEnable(GL_CULL_FACE);
-  glEnable(GL_LINEAR_MIPMAP_LINEAR);
+  //glEnable(GL_LINEAR_MIPMAP_LINEAR);
 
   // Fog stuff
   //glEnable(GL_FOG);
@@ -29,6 +29,7 @@ void GameManager::privateInit()
 
   // Adding shaders
   addShader("Skybox");
+  addShader("Landscape");
 
 
   // Adding the camera to the scene
@@ -37,6 +38,12 @@ void GameManager::privateInit()
   // Objects post Shader
   skybox_.reset(new Skybox(getShaderPtr("Skybox")));
   this->addSubObject(skybox_);
+
+  ls_.reset(new Landscape(getShaderPtr("Landscape"), 10.0f));
+  this->addSubObject(ls_);
+  ls_->setSpeedZ(10.0f);
+
+  ls_->setLightPos(sunPos);
 
 
   // Insert light for old GL

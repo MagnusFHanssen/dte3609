@@ -60,6 +60,7 @@ void Skybox::privateInit(){
          1.0f, -1.0f,  1.0f
     };
 
+
     glGenVertexArrays(1, &vertexArray_);
     glGenBuffers(1, &vertexBuffer_);
 
@@ -87,6 +88,8 @@ void Skybox::privateRender(){
 
     // "Trimming" view matrix
     auto viewMat = glm::mat4(glm::mat3(viewMatrix_));
+
+    viewMat = glm::rotate(viewMat, glm::radians(20.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
 
     assignUniformM4("view", viewMat, shader_);
     assignUniformM4("projection", projectionMatrix_, shader_);

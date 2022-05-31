@@ -23,7 +23,7 @@ if(NOT OPENGL_FOUND)
     message(ERROR " OPENGL not found!")
 endif(NOT OPENGL_FOUND)
 
-
+find_package(assimp CONFIG REQUIRED)
 
 add_custom_target(copy-resource-files ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -49,6 +49,9 @@ set( INCLUDE
         include/Shader.hpp
         include/Skybox.hpp
 
+        include/Vertex.h
+        include/ObjLoader.hpp
+
         include/glext.h
 )
 set( SRCS
@@ -69,4 +72,4 @@ set( SRCS
 
 add_executable(${PROJECT_NAME} ${INCLUDE} ${SRCS})
 
-target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} assimp::assimp)

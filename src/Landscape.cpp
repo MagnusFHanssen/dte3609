@@ -3,10 +3,13 @@
 #include "../../glm-master/glm/gtc/matrix_transform.hpp"
 
 #include <cmath>
+#include <iostream>
 
 
-Landscape::Landscape(float initialDistance, int repeats) : distance(initialDistance), repeats_{repeats}
+Landscape::Landscape(std::shared_ptr<Shader> shader, float initialDistance, int repeats) :
+    distance(initialDistance), shader_{shader}, repeats_{repeats}
 {
+    lightPos_= {0.0f, 0.0f, 0.0f};
 }
 
 Landscape::~Landscape()
@@ -19,13 +22,15 @@ void Landscape::privateInit()
     length = 60.0f;
     rise_ = 5.0f;
 
+    texLoaded_ = false;
+    normalsLoaded_ = false;
+
     int texScaleFactor = 5;
 
     auto const frac = length/3.0f;
 
-    texLoaded_ = loadTextures();
 
-  // Create vertex arrays
+  // Create vertex array
     vertexArray_ = {{-width/2.0f, 0.0f, -frac},
                   {-width/2.0f, 0.0f, 0.0f},
                   {width/2.0f, 0.0f, 0.0f},
@@ -41,8 +46,49 @@ void Landscape::privateInit()
                   {width/2.0f, rise_, -2*frac},
                   {width/2.0f, 0.0f, -length}};
 
+    // Texture number 1
     for (auto vec : vertexArray_){
         texCoordArray_.emplace_back(glm::vec2(vec.x/texScaleFactor, vec.z/texScaleFactor));
+    }
+
+    // Normals
+    for (unsigned int i = 0; i < vertexArray_.size(); i += 4){
+        glm::vec3 u = vertexArray_[i+2] - vertexArray_[i+1];
+        glm::vec3 v = vertexArray_[i] - vertexArray_[i+1];
+        glm::vec3 normal = glm::cross(u, v);
+        normal = glm::normalize(normal);
+
+        for (int j = 0; j < 4; j++){
+            normalArray_.push_back(normal);
+        }
+
+    }
+
+    // Bit of a hack to stuff all of the above into a single vector
+    for (unsigned int i = 0; i < vertexArray_.size(); i++){
+        Vertex vert;
+        vert.Position = vertexArray_[i];
+        vert.Normal = normalArray_[i];
+        vert.TexCoord = texCoordArray_[i];
+
+        // Temporary. I hope...
+        vert.TexCoord2 = texCoordArray_[i];
+
+        combinedArray_.push_back(vert);
+    }
+
+    initBuffers();
+
+    texLoaded_ = loadTexture("rock2.jpg", texName_);
+
+    if (!texLoaded_){
+        std::cout << "Could not load texture rock2.jpg" << std::endl;
+    }
+
+    normalsLoaded_ = loadTexture("rock2normal.jpg", normalMap_);
+
+    if (!normalsLoaded_){
+        std::cout << "Could not load texture rock2normals.jpg" << std::endl;
     }
 
     matrix_ = glm::translate(matrix_, {0.0f, 0.0f, distance});
@@ -50,6 +96,7 @@ void Landscape::privateInit()
 
 void Landscape::privateRender()
 {
+  /* Old stuff
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
 
@@ -97,9 +144,61 @@ void Landscape::privateRender()
 
   glDisable(GL_POLYGON_OFFSET_FILL);
 
-  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_VERTEX_ARRAY);*/
+    //std::cout << glGetError() << std::endl;
 
+    shader_->enable();
 
+    //std::cout << glGetError() << std::endl;
+    // Light
+    assignUniformV3("lightPos", lightPos_, shader_);
+
+    // Matrices
+    assignUniformM4("model", matrix_, shader_);
+    assignUniformM4("view", viewMatrix_, shader_);
+    assignUniformM4("projection", projectionMatrix_, shader_);
+
+    //std::cout << glGetError() << std::endl;
+
+    // Bind textures:
+    assignUniformInt("Texture1", 0, shader_);
+    //std::cout << "163: " << glGetError() << std::endl;
+    glActiveTexture(GL_TEXTURE0);
+    //std::cout << "165: " << glGetError() << std::endl;
+    glBindTexture(GL_TEXTURE_2D, texName_);
+    //std::cout << "167: " << glGetError() << std::endl;
+
+    assignUniformInt("Texture2", 1, shader_);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, normalMap_);
+
+    //std::cout << glGetError() << std::endl;
+
+    // Draw array
+    glBindVertexArray(VAO_);
+    glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+
+    glm::mat4 temp = glm::translate(matrix_, {0.0f, 0.0f, length});
+    assignUniformM4("model", temp, shader_);
+    glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+
+    temp = glm::translate(matrix_, {0.0f, 0.0f, -length});
+    assignUniformM4("model", temp, shader_);
+    glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+
+    temp = glm::translate(matrix_, {0.0f, 0.0f, -2*length});
+    assignUniformM4("model", temp, shader_);
+    glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+
+    temp = glm::translate(matrix_, {0.0f, 0.0f, -3*length});
+    assignUniformM4("model", temp, shader_);
+    glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+
+    glBindVertexArray(0);
+
+    //std::cout << glGetError() << std::endl;
+
+    shader_->disable();
 }
 
 void Landscape::privateUpdate()
@@ -113,21 +212,26 @@ void Landscape::privateUpdate()
     }
 }
 
-bool Landscape::loadTextures()
+bool Landscape::loadTexture(std::string name, GLuint &texName)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glGenTextures(1, &texName_);
+    glGenTextures(1, &texName);
 
-    glBindTexture(GL_TEXTURE_2D, texName_);
+    glBindTexture(GL_TEXTURE_2D, texName);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    std::string pathStr = "./resources/textures/";
+    pathStr.append(name);
+
+    const char *path = &pathStr[0];
 
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("./resources/textures/rock.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
 
     if(data)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -139,6 +243,32 @@ bool Landscape::loadTextures()
     glBindTexture(GL_TEXTURE_2D, NULL);
 
     return true;
+}
+
+void Landscape::initBuffers(){
+    glGenVertexArrays(1, &VAO_);
+    glGenBuffers(1, &VBO_);
+
+    glBindVertexArray(VAO_);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_);
+    glBufferData(GL_ARRAY_BUFFER, combinedArray_.size() * sizeof (Vertex), &combinedArray_[0], GL_STATIC_DRAW);
+
+    // Vertex position
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    // Normal
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    // Texture
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoord));
+
+    // Normal map - Might not be properly implemented
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoord2));
+
+    glBindVertexArray(0);
 }
 
 void Landscape::setSpeedZ(float speed){speed_ = speed;}
@@ -161,4 +291,8 @@ float Landscape::getHeightY(const ColSphereBody& target) const{
     }
 
     return groundLevel + target.getRadius();
+}
+
+void Landscape::setLightPos(glm::vec3 lightPos){
+    lightPos_ = lightPos;
 }
