@@ -62,7 +62,8 @@ class Character : public SceneObject, public ColSphereBody
     Model charModel_;
     std::shared_ptr<Shader> shader_;
 
+    float xBound_;
 
-    
+    glm::mat4 scaleRotMat_;
 };
 

@@ -279,6 +279,11 @@ void Landscape::initBuffers(){
 
 void Landscape::setSpeedZ(float speed){speed_ = speed;}
 
+float Landscape::getSpeedZ(){return speed_;}
+
+void Landscape::incrementSpeedZ(float increment){
+    speed_ += increment;
+}
 float Landscape::getHeightY(const ColSphereBody& target) const{
     auto zDist = distance - target.getWorldPos().z;
 
@@ -299,6 +304,4 @@ float Landscape::getHeightY(const ColSphereBody& target) const{
     return groundLevel + target.getRadius();
 }
 
-void Landscape::setLightPos(glm::vec3 lightPos){
-    lightPos_ = lightPos;
-}
+

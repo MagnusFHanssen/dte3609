@@ -75,7 +75,7 @@ void SceneObject::updateProjectionMatrix(glm::mat4 newMatrix){
     }
 }
 
-void SceneObject::assignUniformInt(const GLchar *name, int i, std::shared_ptr<Shader> shader){
+/*void SceneObject::assignUniformInt(const GLchar *name, int i, std::shared_ptr<Shader> shader){
     GLuint loc = glGetUniformLocation(shader->getProg(), name);
     glUniform1i(loc, i);
 }
@@ -93,6 +93,9 @@ void SceneObject::assignUniformV3(const GLchar *name, const glm::vec3 &vec, std:
 void SceneObject::assignUniformM4(const GLchar *name, const glm::mat4 &mat, std::shared_ptr<Shader> shader){
     GLuint loc = glGetUniformLocation(shader->getProg(), name);
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
-}
+}*/
 
+void SceneObject::setLightPos(glm::vec3 lightPos){
+    lightPos_ = lightPos;
+}
 

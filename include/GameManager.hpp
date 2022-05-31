@@ -40,6 +40,8 @@ class GameManager : public SceneObject
     std::shared_ptr<Text> text_;
     std::shared_ptr<Skybox> skybox_;
 
+    //std::vector<std::shared_ptr
+
     std::vector<std::shared_ptr<SceneObject>> mapList_;
 
     std::unordered_map<std::string, Shader> shaders_;

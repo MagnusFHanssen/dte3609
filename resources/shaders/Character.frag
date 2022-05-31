@@ -7,12 +7,12 @@ in vec3 FragPos;
 
 out vec4 fragColor;
 
-uniform sampler2D Texture1;
+uniform sampler2D texture_diffuse1;
 uniform vec3 lightColor;
 
 void main(void)
 {
-    vec3 texColor = texture(Texture1, TexCoord).rgb;
+    vec3 texColor = texture(texture_diffuse1, TexCoord).rgb;
     vec3 ambient = 0.1f * lightColor;
 
     vec3 norm = normalize(Normal);

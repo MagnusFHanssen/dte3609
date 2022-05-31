@@ -79,7 +79,8 @@ void Skybox::privateInit(){
         "./resources/textures/skybox/back.jpg"
     });
 
-    assignUniformInt("skybox", 0, shader_);
+    //assignUniformInt("skybox", 0, shader_);
+    shader_->setInt("skybox", 0);
 }
 
 void Skybox::privateRender(){
@@ -91,8 +92,10 @@ void Skybox::privateRender(){
 
     viewMat = glm::rotate(viewMat, glm::radians(20.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
 
-    assignUniformM4("view", viewMat, shader_);
-    assignUniformM4("projection", projectionMatrix_, shader_);
+    //assignUniformM4("view", viewMat, shader_);
+    //assignUniformM4("projection", projectionMatrix_, shader_);
+    shader_->setMat4("view", viewMat);
+    shader_->setMat4("projection", projectionMatrix_);
 
     glBindVertexArray(vertexArray_);
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture_);

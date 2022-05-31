@@ -12,6 +12,8 @@ public:
     virtual float getRadius() const = 0;
 
     bool detectCollision(ColSphereBody* target) const{
+        if(!target->active)
+            return false;
         glm::vec3 posA = this->getWorldPos();
         glm::vec3 posB = target->getWorldPos();
         float minDistance = this->getRadius() + target->getRadius();
@@ -21,4 +23,5 @@ public:
 
     glm::vec3 gravity;
     bool attached;
+    bool active;
 };

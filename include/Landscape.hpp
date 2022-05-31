@@ -21,8 +21,8 @@ class Landscape : public SceneObject
         float getHeightY(const ColSphereBody& target) const;
 
         void setSpeedZ(float speed);
-
-        void setLightPos(glm::vec3 lightPos);
+        void incrementSpeedZ(float increment);
+        float getSpeedZ();
 
   protected:
         virtual void privateInit();
@@ -38,8 +38,6 @@ class Landscape : public SceneObject
         float length;
         float distance;
         float rise_;
-
-        glm::vec3 lightPos_;
 
         std::shared_ptr<Shader> shader_;
 

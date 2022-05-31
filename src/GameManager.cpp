@@ -1,6 +1,6 @@
 #include "../include/GameManager.hpp"
 #include <string.h>
-//#include <format>
+#include <random>
 
 GameManager::GameManager()
 {
@@ -46,22 +46,13 @@ void GameManager::privateInit()
 
   ls_->setLightPos(sunPos);
 
-
-  // Insert light for old GL
-  /*GLfloat light_dir[] = {0.2f, 1.0f, -0.3f, 0.0f};
-  glLightfv(GL_LIGHT0, GL_POSITION, light_dir);
-
-  GLfloat ambient[] = {0.4f, 0.4f, 0.4f};
-
-  glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-
-
-  ls_.reset(new Landscape(10.0f));
-  this->addSubObject(ls_);
-
-  character_.reset(new Character());
+  character_.reset(new Character(getShaderPtr("Character")));
   this->addSubObject(character_);
 
+  character_->setLightPos(sunPos);
+
+
+  /*
   bboard_.reset(new Billboard(4.0f, 1.0f, glm::vec3(0.0f, 3.0f, 0.0f), character_, cam_));
   this->addSubObject(bboard_);
 
@@ -95,7 +86,7 @@ void GameManager::privateUpdate()
     //snprintf(life, sizeof(life), "Life: %.1f / %.1f", character_->getLife(), character_->getMaxLife());
     //text_->setString(std::string(life));
 
-    //character_->setYPos(ls_->getHeightY(*character_));
+    character_->setYPos(ls_->getHeightY(*character_));
 }
 
 std::shared_ptr<Camera> GameManager::getCam()
@@ -122,4 +113,9 @@ std::shared_ptr<Shader> GameManager::getShaderPtr(std::string name){
     std::shared_ptr<Shader> ptr(nullptr);
     ptr = std::make_shared<Shader>(shaders_[name]);
     return ptr;
+}
+
+float randMToN(double M, double N)
+{
+    return float(M + (rand() / ( RAND_MAX / (N-M) ) ));
 }

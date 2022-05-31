@@ -50,6 +50,7 @@ set( INCLUDE
         include/Skybox.hpp
         include/Mesh.hpp
         include/Model.hpp
+        include/Rock.hpp
 
         include/MyVertex.h
         include/ObjLoader.hpp
@@ -70,6 +71,7 @@ set( SRCS
         src/Skybox.cpp
         src/Mesh.cpp
         src/Model.cpp
+        src/Rock.cpp
 	
 	app/main.cpp
 )

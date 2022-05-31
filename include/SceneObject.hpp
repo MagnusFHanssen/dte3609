@@ -66,10 +66,12 @@ class SceneObject
   void updateProjectionMatrix(glm::mat4 matrix);
 
   // Shader methods to simplify assigning uniforms
-  void assignUniformInt(const GLchar* name, int i, std::shared_ptr<Shader> shader);
-  void assignUniformFloat(const GLchar* name, float f, std::shared_ptr<Shader> shader);
-  void assignUniformV3(const GLchar* name, const glm::vec3 &vec, std::shared_ptr<Shader> shader);
-  void assignUniformM4(const GLchar* name, const glm::mat4 &mat, std::shared_ptr<Shader> shader);
+  //void assignUniformInt(const GLchar* name, int i, std::shared_ptr<Shader> shader);
+  //void assignUniformFloat(const GLchar* name, float f, std::shared_ptr<Shader> shader);
+  //void assignUniformV3(const GLchar* name, const glm::vec3 &vec, std::shared_ptr<Shader> shader);
+  //void assignUniformM4(const GLchar* name, const glm::mat4 &mat, std::shared_ptr<Shader> shader);
+
+ void setLightPos(glm::vec3 lightPos);
 
  protected:
   // Override this method with your own render-implementation.
@@ -91,7 +93,9 @@ class SceneObject
   glm::mat4 projectionMatrix_;
   glm::mat4 viewMatrix_;
 
+  glm::vec3 lightPos_;
  private:
   // List of all SceneObjects that belong to the current object.
   std::vector<std::shared_ptr<SceneObject> > children_;
+
 };
