@@ -20,7 +20,7 @@ void Landscape::privateInit()
 {
     width = 40.0f;
     length = 60.0f;
-    rise_ = 5.0f;
+    rise_ = 2.0f;
 
     texLoaded_ = false;
     normalsLoaded_ = false;
@@ -66,7 +66,7 @@ void Landscape::privateInit()
 
     // Bit of a hack to stuff all of the above into a single vector
     for (unsigned int i = 0; i < vertexArray_.size(); i++){
-        Vertex vert;
+        MyVertex vert;
         vert.Position = vertexArray_[i];
         vert.Normal = normalArray_[i];
         vert.TexCoord = texCoordArray_[i];
@@ -151,24 +151,26 @@ void Landscape::privateRender()
 
     //std::cout << glGetError() << std::endl;
     // Light
-    assignUniformV3("lightPos", lightPos_, shader_);
+    shader_->setVec3("lightPos", lightPos_);
 
     // Matrices
-    assignUniformM4("model", matrix_, shader_);
-    assignUniformM4("view", viewMatrix_, shader_);
-    assignUniformM4("projection", projectionMatrix_, shader_);
+    shader_->setMat4("model", matrix_);
+    shader_->setMat4("view", viewMatrix_);
+    shader_->setMat4("projection", projectionMatrix_);
 
     //std::cout << glGetError() << std::endl;
 
     // Bind textures:
-    assignUniformInt("Texture1", 0, shader_);
+    //assignUniformInt("Texture1", 0, shader_);
+    shader_->setInt("Texture1", 0);
     //std::cout << "163: " << glGetError() << std::endl;
     glActiveTexture(GL_TEXTURE0);
     //std::cout << "165: " << glGetError() << std::endl;
     glBindTexture(GL_TEXTURE_2D, texName_);
     //std::cout << "167: " << glGetError() << std::endl;
 
-    assignUniformInt("Texture2", 1, shader_);
+    //assignUniformInt("Texture2", 1, shader_);
+    shader_->setInt("Texture2", 1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, normalMap_);
 
@@ -179,19 +181,23 @@ void Landscape::privateRender()
     glDrawArrays(GL_QUADS, 0, vertexArray_.size());
 
     glm::mat4 temp = glm::translate(matrix_, {0.0f, 0.0f, length});
-    assignUniformM4("model", temp, shader_);
+    //assignUniformM4("model", temp, shader_);
+    shader_->setMat4("model", temp);
     glDrawArrays(GL_QUADS, 0, vertexArray_.size());
 
     temp = glm::translate(matrix_, {0.0f, 0.0f, -length});
-    assignUniformM4("model", temp, shader_);
+    //assignUniformM4("model", temp, shader_);
+    shader_->setMat4("model", temp);
     glDrawArrays(GL_QUADS, 0, vertexArray_.size());
 
     temp = glm::translate(matrix_, {0.0f, 0.0f, -2*length});
-    assignUniformM4("model", temp, shader_);
+    //assignUniformM4("model", temp, shader_);
+    shader_->setMat4("model", temp);
     glDrawArrays(GL_QUADS, 0, vertexArray_.size());
 
     temp = glm::translate(matrix_, {0.0f, 0.0f, -3*length});
-    assignUniformM4("model", temp, shader_);
+    //assignUniformM4("model", temp, shader_);
+    shader_->setMat4("model", temp);
     glDrawArrays(GL_QUADS, 0, vertexArray_.size());
 
     glBindVertexArray(0);
@@ -252,21 +258,21 @@ void Landscape::initBuffers(){
     glBindVertexArray(VAO_);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO_);
-    glBufferData(GL_ARRAY_BUFFER, combinedArray_.size() * sizeof (Vertex), &combinedArray_[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, combinedArray_.size() * sizeof (MyVertex), &combinedArray_[0], GL_STATIC_DRAW);
 
     // Vertex position
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(MyVertex), (void*)0);
     // Normal
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(MyVertex), (void*)offsetof(MyVertex, Normal));
     // Texture
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoord));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(MyVertex), (void*)offsetof(MyVertex, TexCoord));
 
     // Normal map - Might not be properly implemented
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoord2));
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(MyVertex), (void*)offsetof(MyVertex, TexCoord2));
 
     glBindVertexArray(0);
 }

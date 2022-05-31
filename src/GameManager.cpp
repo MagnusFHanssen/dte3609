@@ -30,6 +30,7 @@ void GameManager::privateInit()
   // Adding shaders
   addShader("Skybox");
   addShader("Landscape");
+  addShader("Character");
 
 
   // Adding the camera to the scene

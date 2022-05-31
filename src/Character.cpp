@@ -5,10 +5,13 @@
 #include "../include/stb_image.h"
 #include "../../glm-master/glm/gtc/matrix_transform.hpp"
 
-Character::Character(float xPos, float yPos) : _xPos(xPos), _yPos(yPos)
+Character::Character( std::shared_ptr<Shader> shader, float xPos, float yPos) :
+   _xPos(xPos), _yPos(yPos), shader_{shader}
 {
     gravity = {0.0f, -9.81f, 0.0f};
     attached = false;
+
+    charModel_ = Model("./resources/models/Car.obj");
 }
 
 Character::~Character()
@@ -27,7 +30,7 @@ void Character::privateInit()
     armor_ = 0.0f;
 
 
-    GLfloat const verts[8][3] = {{scale_, -scale_, scale_},
+    /*GLfloat const verts[8][3] = {{scale_, -scale_, scale_},
                            {scale_, scale_, scale_},
                            {scale_, -scale_, -scale_},
                            {scale_, scale_, -scale_},
@@ -110,9 +113,9 @@ void Character::privateInit()
         glNormal3fv(norms[5]); glTexCoord2fv(tex[1]); glVertex3fv(verts[2]);
         glNormal3fv(norms[5]); glTexCoord2fv(tex[2]); glVertex3fv(verts[7]);
 
-        /*for (int i : indexes){
-                glNormal3fv(normsSoft[i]); glVertex3fv(verts[i]);
-            }*/
+        //for (int i : indexes){
+        //        glNormal3fv(normsSoft[i]); glVertex3fv(verts[i]);
+        //    }
 
         glEnd();
     };
@@ -120,7 +123,7 @@ void Character::privateInit()
     dList_ = glGenLists(1);
     glNewList(dList_, GL_COMPILE);
     drawCharacter();
-    glEndList();
+    glEndList();*/
 
     /*auto const drawNormals = [&verts, &normsSoft, &indexes]{
         glBegin(GL_LINES);
@@ -141,11 +144,11 @@ void Character::privateInit()
     drawNormals();
     glEndList();*/
 
-    texLoaded_ = loadTextures();
+    /*texLoaded_ = loadTextures();
 
     // Translation:
     matrix_ = glm::translate(matrix_, {_xPos, _yPos, 0.0f});
-    matrix_ = glm::rotate(matrix_, _rotation, {0.0f, 1.0f, 0.0f});
+    matrix_ = glm::rotate(matrix_, _rotation, {0.0f, 1.0f, 0.0f});*/
 
 
 }
@@ -164,7 +167,7 @@ void Character::privateRender()
       glTexCoord2f(0.0f, 1.0f); glVertex3f(-size,  size,  sizez);
     glEnd();*/
 
-    glEnable(GL_LIGHTING);
+    /*glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
     //glMatrixMode(GL_MODELVIEW);
@@ -200,7 +203,7 @@ void Character::privateRender()
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHTING);
     //glColor3f(0.1f, 0.1f, 0.9f);
-    //glCallList(dNormal_);
+    //glCallList(dNormal_);*/
 }
 
 void Character::privateUpdate()

@@ -3,11 +3,12 @@
 #include <windows.h>
 #include "SceneObject.hpp"
 #include "ColSphereBody.hpp"
+#include "Model.hpp"
 
 class Character : public SceneObject, public ColSphereBody
 {
 	public:
-        Character(float xPos = 0.0f, float yPos = 2.0f);
+        Character(std::shared_ptr<Shader> shader, float xPos = 0.0f, float yPos = 2.0f);
         ~Character();
 
         void moveLeft();
@@ -25,6 +26,8 @@ class Character : public SceneObject, public ColSphereBody
 
         glm::vec3 getWorldPos() const;
         float getRadius() const;
+
+        Model getModel();
 
 
   protected:
@@ -55,6 +58,9 @@ class Character : public SceneObject, public ColSphereBody
     GLuint texName_;
 
     bool texLoaded_;
+
+    Model charModel_;
+    std::shared_ptr<Shader> shader_;
 
 
     

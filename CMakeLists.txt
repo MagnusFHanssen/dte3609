@@ -48,8 +48,10 @@ set( INCLUDE
         include/Minimap.hpp
         include/Shader.hpp
         include/Skybox.hpp
+        include/Mesh.hpp
+        include/Model.hpp
 
-        include/Vertex.h
+        include/MyVertex.h
         include/ObjLoader.hpp
 
         include/glext.h
@@ -66,6 +68,8 @@ set( SRCS
         src/Minimap.cpp
         src/Shader.cpp
         src/Skybox.cpp
+        src/Mesh.cpp
+        src/Model.cpp
 	
 	app/main.cpp
 )

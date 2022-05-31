@@ -2,7 +2,7 @@
 
 #include "../../glm-master/glm/glm.hpp"
 
-struct Vertex {
+struct MyVertex {
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TexCoord;

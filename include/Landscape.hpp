@@ -9,7 +9,7 @@
 
 #include "Shader.hpp"
 
-#include "Vertex.h"
+#include "MyVertex.h"
 
 class Landscape : public SceneObject
 {
@@ -49,7 +49,7 @@ class Landscape : public SceneObject
         // texture coord array
         std::vector< glm::vec2 > texCoordArray_;
 
-        std::vector<Vertex> combinedArray_;
+        std::vector<MyVertex> combinedArray_;
 
 
         // GLuints
