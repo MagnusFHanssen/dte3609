@@ -12,4 +12,9 @@ const int KEY_ID_DOWN     = 7;
 const int KEY_ID_LEFT     = 8;
 const int KEY_ID_RIGHT    = 9;
 
+const int KEY_ID_E        = 10;
+const int KEY_ID_R        = 11;
+const int KEY_ID_F        = 12;
+const int KEY_ID_V        = 13;
+
 const int MOUSE_LEFT_BUTTON_DOWN = 20;

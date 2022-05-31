@@ -61,6 +61,10 @@ void display()
   if(keyPressed[KEY_ID_C]==true)      gm->getCam()->moveDown();
   if(keyPressed[KEY_ID_LEFT]==true)   gm->getMC()->moveLeft();
   if(keyPressed[KEY_ID_RIGHT]==true)  gm->getMC()->moveRight();
+  if(keyPressed[KEY_ID_E]==true)      gm->getCam()->turnLeft();
+  if(keyPressed[KEY_ID_R]==true)      gm->getCam()->turnRight();
+  if(keyPressed[KEY_ID_F]==true)      gm->getCam()->turnUp();
+  if(keyPressed[KEY_ID_V]==true)      gm->getCam()->turnDown();
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -98,6 +102,18 @@ void keyDown(unsigned char key, int x, int y)
     case 'c':
       keyPressed[KEY_ID_C] = true;
       break;
+  case 'e':
+      keyPressed[KEY_ID_E] = true;
+      break;
+  case 'r':
+      keyPressed[KEY_ID_R] = true;
+      break;
+  case 'f':
+      keyPressed[KEY_ID_F] = true;
+      break;
+  case 'v':
+      keyPressed[KEY_ID_V] = true;
+      break;
 
     default:
       glutPostRedisplay();
@@ -125,6 +141,18 @@ void keyUp(unsigned char key, int x, int y)
       break;
     case 'c':
       keyPressed[KEY_ID_C] = false;
+      break;
+  case 'e':
+      keyPressed[KEY_ID_E] = false;
+      break;
+  case 'r':
+      keyPressed[KEY_ID_R] = false;
+      break;
+  case 'f':
+      keyPressed[KEY_ID_F] = false;
+      break;
+  case 'v':
+      keyPressed[KEY_ID_V] = false;
       break;
 
   }
@@ -202,6 +230,11 @@ void reshape(int w, int h)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+
+  // Modern OpenGl
+  glm::mat4 projection(1.0f);
+  projection = glm::perspective(glm::radians(60.0f), float(w)/float(h), 0.1f, 3000.0f);
+  gm->updateProjectionMatrix(projection);
 }
 
 int main(int argc, char** argv)

@@ -17,28 +17,36 @@ void GameManager::privateInit()
   glEnable(GL_LINEAR_MIPMAP_LINEAR);
 
   // Fog stuff
-  glEnable(GL_FOG);
+  //glEnable(GL_FOG);
+  //GLfloat fogColor[] {0.9f, 0.9f, 0.9f, 1.0f};
+  //glFogfv(GL_FOG_COLOR, fogColor);
+  //glFogf(GL_FOG_DENSITY, 0.01f);
+  //glFogi(GL_FOG_MODE, GL_EXP);
 
+
+  // Light
   sunPos = {20.0f, 100.0f, -30.0f};
 
   // Adding shaders
   addShader("Skybox");
 
-  GLfloat fogColor[] {0.9f, 0.9f, 0.9f, 1.0f};
-  glFogfv(GL_FOG_COLOR, fogColor);
-  glFogf(GL_FOG_DENSITY, 0.01f);
-  glFogi(GL_FOG_MODE, GL_EXP);
+
+  // Adding the camera to the scene
+  cam_.reset(new Camera());
+
+  // Objects post Shader
+  skybox_.reset(new Skybox(getShaderPtr("Skybox")));
+  this->addSubObject(skybox_);
+
 
   // Insert light for old GL
-  GLfloat light_dir[] = {0.2f, 1.0f, -0.3f, 0.0f};
+  /*GLfloat light_dir[] = {0.2f, 1.0f, -0.3f, 0.0f};
   glLightfv(GL_LIGHT0, GL_POSITION, light_dir);
 
   GLfloat ambient[] = {0.4f, 0.4f, 0.4f};
 
   glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 
-  // Adding the camera to the scene
-  cam_.reset(new Camera());
 
   ls_.reset(new Landscape(10.0f));
   this->addSubObject(ls_);
@@ -60,11 +68,7 @@ void GameManager::privateInit()
   ls_->setSpeedZ(10.0f);
 
   mapList_.push_back(ls_);
-  mapList_.push_back(character_);
-
-  // Objects post Shader
-  skybox_.reset(new Skybox(getShaderPtr("Skybox")));
-  this->addSubObject(skybox_);
+  mapList_.push_back(character_);*/
 
 }
 
@@ -78,11 +82,12 @@ void GameManager::privateUpdate()
   // Instead of adding alle objects in the scene as subobject to the camera they are added as subobjects
   // to the game manager. Therefore, we set the game manager matrix equal to the camera matrix. 
   this->matrix_ = cam_->getMatrix();
-    char life[20];
-    snprintf(life, sizeof(life), "Life: %.1f / %.1f", character_->getLife(), character_->getMaxLife());
-    text_->setString(std::string(life));
+  updateViewMatrix(cam_->getMatrix());
+    //char life[20];
+    //snprintf(life, sizeof(life), "Life: %.1f / %.1f", character_->getLife(), character_->getMaxLife());
+    //text_->setString(std::string(life));
 
-    character_->setYPos(ls_->getHeightY(*character_));
+    //character_->setYPos(ls_->getHeightY(*character_));
 }
 
 std::shared_ptr<Camera> GameManager::getCam()

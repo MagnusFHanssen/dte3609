@@ -74,8 +74,8 @@ void Skybox::privateInit(){
         "./resources/textures/skybox/left.jpg",
         "./resources/textures/skybox/top.jpg",
         "./resources/textures/skybox/bottom.jpg",
-        "./resources/textures/skybox/back.jgp",
-        "./resources/textures/skybox/front.jpg"
+        "./resources/textures/skybox/front.jpg",
+        "./resources/textures/skybox/back.jpg"
     });
 
     assignUniformInt("skybox", 0, shader_);
@@ -107,6 +107,7 @@ GLuint Skybox::loadCubemap(std::vector<std::string> faces){
     glBindTexture(GL_TEXTURE_CUBE_MAP, texId);
 
     int width, height, nrChannels;
+
     for (unsigned int i = 0; i < faces.size(); i++)
     {
         unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);

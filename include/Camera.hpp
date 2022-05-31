@@ -16,6 +16,11 @@ class Camera : public SceneObject
     void moveDown();
     void moveBackward();
     void moveForward();
+
+    void turnUp();
+    void turnDown();
+    void turnLeft();
+    void turnRight();
     
   protected:
     void privateInit();

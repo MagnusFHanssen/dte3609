@@ -10,7 +10,7 @@ Camera::Camera()
 {
   matrix_ = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -50.0f));
   matrix_ = glm::rotate(matrix_, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
-  speed = 0.001f;
+  speed = 0.005f;
 }
 
 Camera::~Camera()
@@ -58,3 +58,18 @@ void Camera::moveBackward()
   matrix_ = glm::translate(matrix_, glm::vec3(0.0f, 0.0f, -speed));
 }
 
+void Camera::turnUp(){
+    matrix_ = glm::rotate(matrix_, speed/20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+}
+
+void Camera::turnDown(){
+    matrix_ = glm::rotate(matrix_, -speed/20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+}
+
+void Camera::turnLeft(){
+    matrix_ = glm::rotate(matrix_, speed/20.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+void Camera::turnRight(){
+    matrix_ = glm::rotate(matrix_, -speed/20.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+}
