@@ -31,6 +31,7 @@ void GameManager::privateInit()
   addShader("Skybox");
   addShader("Landscape");
   addShader("Character");
+  addShader("Rock");
 
 
   // Adding the camera to the scene
@@ -42,7 +43,7 @@ void GameManager::privateInit()
 
   ls_.reset(new Landscape(getShaderPtr("Landscape"), 10.0f));
   this->addSubObject(ls_);
-  ls_->setSpeedZ(10.0f);
+  ls_->setSpeedZ(0.0f);
 
   ls_->setLightPos(sunPos);
 
@@ -51,6 +52,13 @@ void GameManager::privateInit()
 
   character_->setLightPos(sunPos);
 
+
+  rockModel_.reset(new Model("./resources/models/Rock1.obj"));
+  rockModel_->meshes.erase(rockModel_->meshes.begin());
+  std::shared_ptr<Rock> rock;
+  rock.reset(new Rock(getShaderPtr("Rock"), ls_, rockModel_, false));
+
+  this->addSubObject(rock);
 
   /*
   bboard_.reset(new Billboard(4.0f, 1.0f, glm::vec3(0.0f, 3.0f, 0.0f), character_, cam_));
@@ -113,9 +121,4 @@ std::shared_ptr<Shader> GameManager::getShaderPtr(std::string name){
     std::shared_ptr<Shader> ptr(nullptr);
     ptr = std::make_shared<Shader>(shaders_[name]);
     return ptr;
-}
-
-float randMToN(double M, double N)
-{
-    return float(M + (rand() / ( RAND_MAX / (N-M) ) ));
 }

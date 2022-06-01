@@ -304,4 +304,26 @@ float Landscape::getHeightY(const ColSphereBody& target) const{
     return groundLevel + target.getRadius();
 }
 
+float Landscape::getHeightY(float z, float radius) const{
+    auto zDist = distance - z;
 
+    // Put zDist in the correct domain, since the height is periodic
+    while(zDist < 0.0f)
+        zDist += length;
+    while(zDist >= length)
+        zDist -= length;
+
+    float groundLevel;
+
+    if(zDist <= length/3.0f){
+        groundLevel = 0.0f;
+    }else{
+        groundLevel = rise_ * (1.0 - 3.0f*abs(zDist/length - 2.0f/3.0f));
+    }
+
+    return groundLevel + radius;
+}
+
+bool Landscape::detectCollision(const ColSphereBody &target) const{
+    return target.getWorldPos().y <= getHeightY(target);
+}

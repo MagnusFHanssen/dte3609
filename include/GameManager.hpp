@@ -11,6 +11,7 @@
 #include "Particle.hpp"
 #include "Text.hpp"
 #include "Skybox.hpp"
+#include "Rock.hpp"
 
 class GameManager : public SceneObject
 {
@@ -40,11 +41,13 @@ class GameManager : public SceneObject
     std::shared_ptr<Text> text_;
     std::shared_ptr<Skybox> skybox_;
 
-    //std::vector<std::shared_ptr
+    std::vector<std::shared_ptr<Rock>> rocks_;
 
     std::vector<std::shared_ptr<SceneObject>> mapList_;
 
     std::unordered_map<std::string, Shader> shaders_;
+
+    std::shared_ptr<Model> rockModel_;
 
 };
 
