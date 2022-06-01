@@ -13,6 +13,7 @@
 #include "Skybox.hpp"
 #include "Rock.hpp"
 
+
 class GameManager : public SceneObject
 {
 	public:
@@ -21,6 +22,8 @@ class GameManager : public SceneObject
     
     std::shared_ptr<Camera> getCam();
     std::shared_ptr<Character> getMC();
+
+    bool isFinished();
 
   protected:
     virtual void privateInit();
@@ -48,6 +51,12 @@ class GameManager : public SceneObject
     std::unordered_map<std::string, Shader> shaders_;
 
     std::shared_ptr<Model> rockModel_;
+
+    bool finished_;
+
+    float timer_;
+
+    bool rocksSpread_;
 
 };
 

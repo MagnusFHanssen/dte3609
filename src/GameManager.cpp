@@ -1,6 +1,6 @@
 #include "../include/GameManager.hpp"
 #include <string.h>
-#include <random>
+
 
 GameManager::GameManager()
 {
@@ -23,6 +23,7 @@ void GameManager::privateInit()
   //glFogf(GL_FOG_DENSITY, 0.01f);
   //glFogi(GL_FOG_MODE, GL_EXP);
 
+  finished_ = false;
 
   // Light
   sunPos = {20.0f, 100.0f, -30.0f};
@@ -55,10 +56,31 @@ void GameManager::privateInit()
 
   rockModel_.reset(new Model("./resources/models/Rock1.obj"));
   rockModel_->meshes.erase(rockModel_->meshes.begin());
-  std::shared_ptr<Rock> rock;
-  rock.reset(new Rock(getShaderPtr("Rock"), ls_, rockModel_, false));
 
-  this->addSubObject(rock);
+  auto rockShader = getShaderPtr("Rock");
+  rockShader->enable();
+  rockShader->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+  rockShader->setVec3("lightPos", sunPos);
+  rockShader->disable();
+
+  //std::shared_ptr<Rock> rock;
+  //rock.reset(new Rock(getShaderPtr("Rock"), ls_, rockModel_, false));
+
+  //this->addSubObject(rock);
+  //rocks_.push_back(rock);
+
+  for(int i = 0; i < 8; i++){
+      rocks_.emplace_back(new Rock(getShaderPtr("Rock"), ls_, rockModel_, false));
+      this->addSubObject(rocks_.back());
+  }
+
+  for(int i = 0; i < 4; i++){
+      rocks_.emplace_back(new Rock(getShaderPtr("Rock"), ls_, rockModel_, true));
+      this->addSubObject(rocks_.back());
+      rocks_.back()->setDamage(2.0f);
+  }
+
+  rocksSpread_ = false;
 
   /*
   bboard_.reset(new Billboard(4.0f, 1.0f, glm::vec3(0.0f, 3.0f, 0.0f), character_, cam_));
@@ -77,6 +99,7 @@ void GameManager::privateInit()
   mapList_.push_back(ls_);
   mapList_.push_back(character_);*/
 
+  timer_ = 0.0f;
 }
 
 void GameManager::privateRender()
@@ -94,7 +117,30 @@ void GameManager::privateUpdate()
     //snprintf(life, sizeof(life), "Life: %.1f / %.1f", character_->getLife(), character_->getMaxLife());
     //text_->setString(std::string(life));
 
+    if(!rocksSpread_){
+        for (unsigned int i = 1; i < rocks_.size(); i++){
+            rocks_.at(i)->setZ(Rock::MIN_Y - (i * 50.0f)/*+ Utility::randMToN(-10.0f, 10.0f)*/);
+        }
+        rocksSpread_ = true;
+    }
+
     character_->setYPos(ls_->getHeightY(*character_));
+
+    timer_ += 1.0f/this->fps_;
+
+
+
+    ls_->setSpeedZ(glm::max(0.0f, timer_ - 10.0f));
+
+    // Collision logic:
+    for (auto rock : rocks_){
+        if(rock->active && character_->detectCollision(rock.get())){
+            float damage = rock->collide();
+            if(character_->doDamage(damage) <= 0.0f){
+                finished_ = true;
+            }
+        }
+    }
 }
 
 std::shared_ptr<Camera> GameManager::getCam()
@@ -122,3 +168,5 @@ std::shared_ptr<Shader> GameManager::getShaderPtr(std::string name){
     ptr = std::make_shared<Shader>(shaders_[name]);
     return ptr;
 }
+
+bool GameManager::isFinished(){return finished_;}

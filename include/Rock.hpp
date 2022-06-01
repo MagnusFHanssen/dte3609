@@ -12,8 +12,8 @@ public:
     Rock(std::shared_ptr<Shader> shader, std::shared_ptr<Landscape> ls, std::shared_ptr<Model> model, bool falling = true);
     ~Rock();
 
-    glm::vec3 getWorldPos() const;
-    float getRadius() const;
+    virtual glm::vec3 getWorldPos() const;
+    virtual float getRadius() const;
 
     glm::vec3 gravity;
     bool attached;
@@ -23,6 +23,8 @@ public:
     void respawn();
 
     void setPos(float x, float y, float z);
+
+    void setZ(float z);
 
 protected:
     void privateInit();
@@ -40,12 +42,12 @@ private:
 
     float damage_;
 
-    bool active_;
     bool falling_;
 
     glm::mat4 scaleRotMat_;
 
     // constants
+public:
     static const float MIN_X, MAX_X,
     MIN_Y, MAX_Y, MIN_Z, MAX_Z, MIN_SCALE, MAX_SCALE;
 

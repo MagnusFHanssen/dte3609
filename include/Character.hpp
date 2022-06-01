@@ -24,8 +24,8 @@ class Character : public SceneObject, public ColSphereBody
         void setMaxLife(float life);
         float getMaxLife();
 
-        glm::vec3 getWorldPos() const;
-        float getRadius() const;
+        virtual glm::vec3 getWorldPos() const;
+        virtual float getRadius() const;
 
         Model getModel();
 

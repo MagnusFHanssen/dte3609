@@ -69,6 +69,15 @@ void display()
   glutSwapBuffers();
   glutPostRedisplay();
 
+  // Terminating from within game:
+  if (gm->isFinished()){
+              glutDestroyWindow(window);
+        #ifndef _WIN32
+              // Must use this with regular glut, since it never returns control to main().
+              exit(0);
+        #endif
+  }
+
 }
 
 void keyDown(unsigned char key, int x, int y)
@@ -233,7 +242,7 @@ void reshape(int w, int h)
 
   // Modern OpenGl
   glm::mat4 projection(1.0f);
-  projection = glm::perspective(glm::radians(60.0f), float(w)/float(h), 0.1f, 3000.0f);
+  projection = glm::perspective(glm::radians(60.0f), float(w)/float(h), 0.1f, 300.0f);
   gm->updateProjectionMatrix(projection);
 }
 

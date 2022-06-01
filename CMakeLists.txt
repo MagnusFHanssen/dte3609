@@ -54,6 +54,7 @@ set( INCLUDE
 
         include/MyVertex.h
         include/ObjLoader.hpp
+        include/Utility.h
 
         include/glext.h
 )

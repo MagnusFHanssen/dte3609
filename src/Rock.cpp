@@ -8,10 +8,10 @@
 // Constants
 const float Rock::MIN_X = -18.0f;
 const float Rock::MAX_X = 18.0f;
-const float Rock::MIN_Y = 10.0f;
-const float Rock::MAX_Y = 100.0f;
-const float Rock::MIN_Z = -10.0f;
-const float Rock::MAX_Z = 200.0f;
+const float Rock::MIN_Y = 20.0f;
+const float Rock::MAX_Y = 400.0f;
+const float Rock::MIN_Z = -300.0f;
+const float Rock::MAX_Z = 100.0f;
 
 float randMToN(float M, float N)
 {
@@ -21,9 +21,11 @@ float randMToN(float M, float N)
 Rock::Rock(std::shared_ptr<Shader> shader, std::shared_ptr<Landscape> ls, std::shared_ptr<Model> model, bool falling):
     shader_{shader}, ls_{ls}, model_{model}, falling_{falling}
 {
-    gravity = {0.0f, -9.81f, 0.0f};
+    gravity = {0.0f, -9.81f * 4.0f, 10.0f};
     attached = false;
     worldPos = {0.0f, 0.0f, 0.0f};
+
+    setDamage(1.0f);
 }
 
 Rock::~Rock(){}
@@ -31,10 +33,6 @@ Rock::~Rock(){}
 void Rock::privateInit(){
     respawn();
 
-    shader_->enable();
-    shader_->setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-    shader_->setVec3("lightPos", lightPos_);
-    shader_->disable();
 }
 
 void Rock::privateRender(){
@@ -52,8 +50,8 @@ void Rock::privateRender(){
 void Rock::privateUpdate(){
     glm::vec3 mov = {0.0f, 0.0f, ls_->getSpeedZ()/this->fps_};
     if(!attached){
-        mov += gravity/float(this->fps_);
         attached = ls_->detectCollision(*this);
+        mov += gravity/float(this->fps_);
     }
     worldPos += mov;
     matrix_ = glm::translate(matrix_, mov);
@@ -64,23 +62,23 @@ void Rock::privateUpdate(){
 }
 
 void Rock::respawn(){
-    active_ = true;
+    active = true;
+    float x = randMToN(MIN_X, MAX_X);
     float y;
+    float z = MIN_Z;
+    scale_ = randMToN(2.0f, 3.0f);
+
     if(falling_){
         y = randMToN(MIN_Y, MAX_Y);
         attached = false;
     }else{
         attached = true;
-        y = ls_->getHeightY(*this);
+        y = ls_->getHeightY(z, getRadius());
     }
-    float x = randMToN(MIN_X, MAX_X);
-    float z = MIN_Z;
-
-    scale_ = randMToN(2.0f, 3.0f);
     setPos(x, y, z);
 
-
-    scaleRotMat_ = glm::scale(glm::mat4(1.0f), {scale_, scale_, scale_});
+    scaleRotMat_ = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), {1.0f, 0.0f, 0.0f});
+    scaleRotMat_ = glm::scale(scaleRotMat_, {scale_, scale_, scale_});
 
 }
 
@@ -92,7 +90,7 @@ void Rock::setPos(float x, float y, float z){
 void Rock::setDamage(float damage){damage_ = damage;}
 
 float Rock::collide(){
-    active_ = false;
+    active = false;
     return damage_;
 }
 
@@ -101,5 +99,9 @@ glm::vec3 Rock::getWorldPos() const{
 }
 
 float Rock::getRadius() const{
-    return scale_;
+    return scale_ * 0.8f;
+}
+
+void Rock::setZ(float z){
+    setPos(worldPos.x, worldPos.y, z);
 }

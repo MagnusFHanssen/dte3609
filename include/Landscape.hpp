@@ -14,11 +14,12 @@
 class Landscape : public SceneObject
 {
 	public:
-        Landscape(std::shared_ptr<Shader> shader, float initialDistance = 0.0f, int repeats = 3);
+        Landscape(std::shared_ptr<Shader> shader, float initialDistance = 0.0f, int repeats = 10);
         ~Landscape();
 
         bool detectCollision(const ColSphereBody& target) const;
         float getHeightY(const ColSphereBody& target) const;
+        float getHeightY(float z, float radius) const;
 
         void setSpeedZ(float speed);
         void incrementSpeedZ(float increment);

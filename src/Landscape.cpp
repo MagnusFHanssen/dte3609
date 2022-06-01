@@ -185,12 +185,18 @@ void Landscape::privateRender()
     shader_->setMat4("model", temp);
     glDrawArrays(GL_QUADS, 0, vertexArray_.size());
 
-    temp = glm::translate(matrix_, {0.0f, 0.0f, -length});
-    //assignUniformM4("model", temp, shader_);
-    shader_->setMat4("model", temp);
-    glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+    temp = matrix_; //glm::translate(matrix_, {0.0f, 0.0f, -length});
 
-    temp = glm::translate(matrix_, {0.0f, 0.0f, -2*length});
+    for (int i = 0; i < repeats_; i++){
+        temp = glm::translate(temp, {0.0f, 0.0f, -length});
+        shader_->setMat4("model", temp);
+        glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+    }
+
+
+
+
+    /*temp = glm::translate(matrix_, {0.0f, 0.0f, -2*length});
     //assignUniformM4("model", temp, shader_);
     shader_->setMat4("model", temp);
     glDrawArrays(GL_QUADS, 0, vertexArray_.size());
@@ -198,7 +204,7 @@ void Landscape::privateRender()
     temp = glm::translate(matrix_, {0.0f, 0.0f, -3*length});
     //assignUniformM4("model", temp, shader_);
     shader_->setMat4("model", temp);
-    glDrawArrays(GL_QUADS, 0, vertexArray_.size());
+    glDrawArrays(GL_QUADS, 0, vertexArray_.size());*/
 
     glBindVertexArray(0);
 
@@ -285,23 +291,7 @@ void Landscape::incrementSpeedZ(float increment){
     speed_ += increment;
 }
 float Landscape::getHeightY(const ColSphereBody& target) const{
-    auto zDist = distance - target.getWorldPos().z;
-
-    // Put zDist in the correct domain, since the height is periodic
-    while(zDist < 0.0f)
-        zDist += length;
-    while(zDist >= length)
-        zDist -= length;
-
-    float groundLevel;
-
-    if(zDist <= length/3.0f){
-        groundLevel = 0.0f;
-    }else{
-        groundLevel = rise_ * (1.0 - 3.0f*abs(zDist/length - 2.0f/3.0f));
-    }
-
-    return groundLevel + target.getRadius();
+    return getHeightY(target.getWorldPos().z, target.getRadius());
 }
 
 float Landscape::getHeightY(float z, float radius) const{
