@@ -55,7 +55,6 @@ set( INCLUDE
         include/Rock.hpp
 
         include/MyVertex.h
-        include/ObjLoader.hpp
         include/SText.hpp
 
         include/glext.h
