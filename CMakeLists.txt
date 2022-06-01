@@ -25,6 +25,8 @@ endif(NOT OPENGL_FOUND)
 
 find_package(assimp CONFIG REQUIRED)
 
+find_package(freetype CONFIG REQUIRED)
+
 add_custom_target(copy-resource-files ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/resources
@@ -54,7 +56,7 @@ set( INCLUDE
 
         include/MyVertex.h
         include/ObjLoader.hpp
-        include/Utility.h
+        include/SText.hpp
 
         include/glext.h
 )
@@ -73,10 +75,11 @@ set( SRCS
         src/Mesh.cpp
         src/Model.cpp
         src/Rock.cpp
+        src/SText.cpp
 	
 	app/main.cpp
 )
 
 add_executable(${PROJECT_NAME} ${INCLUDE} ${SRCS})
 
-target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} assimp::assimp)
+target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} assimp::assimp freetype)

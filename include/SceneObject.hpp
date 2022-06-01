@@ -57,7 +57,7 @@ class SceneObject
   void addSubObject(std::shared_ptr<SceneObject> newchild);
   void removeSubObject(const std::shared_ptr<SceneObject> child);
   // Dangerous to enable, and use SharedPtr if this is to be used!
-  //  std::vector<ScopedPtr<SceneObject> >& getSubObjects();
+  // std::vector<ScopedPtr<SceneObject> >& getSubObjects();
 
   void setMatrix(const glm::mat4& m) { matrix_ = m; }
   glm::mat4& getMatrix() { return matrix_; }
@@ -94,8 +94,10 @@ class SceneObject
   glm::mat4 viewMatrix_;
 
   glm::vec3 lightPos_;
- private:
+
+private:
   // List of all SceneObjects that belong to the current object.
   std::vector<std::shared_ptr<SceneObject> > children_;
+
 
 };

@@ -12,6 +12,7 @@
 #include "Text.hpp"
 #include "Skybox.hpp"
 #include "Rock.hpp"
+#include "SText.hpp"
 
 
 class GameManager : public SceneObject
@@ -54,9 +55,13 @@ class GameManager : public SceneObject
 
     bool finished_;
 
+    float endTime_;
+
     float timer_;
 
     bool rocksSpread_;
+
+    std::shared_ptr<SText> sText_;
 
 };
 

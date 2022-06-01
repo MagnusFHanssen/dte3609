@@ -14,7 +14,11 @@ void GameManager::privateInit()
 {
   // Set default OpenGL states
   glEnable(GL_CULL_FACE);
-  //glEnable(GL_LINEAR_MIPMAP_LINEAR);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+  sText_.reset(new SText());
 
   // Fog stuff
   //glEnable(GL_FOG);
@@ -105,6 +109,12 @@ void GameManager::privateInit()
 void GameManager::privateRender()
 {
   // Nothing to render
+    if(finished_){
+        char outText[40];
+        snprintf(outText, sizeof (outText), "You finished with a score of %.1f!", endTime_);
+        sText_->RenderText(std::string(outText), 70.0f, 340.0f, 1.0f, glm::vec3(0.9, 0.3f, 0.1f));
+        sText_->RenderText("Restart the game to play again!", 70.0f, 300.0f, 1.0f, glm::vec3(0.9, 0.3f, 0.1f));
+    }
 }
 
 void GameManager::privateUpdate()
@@ -119,11 +129,12 @@ void GameManager::privateUpdate()
 
     if(!rocksSpread_){
         for (unsigned int i = 1; i < rocks_.size(); i++){
-            rocks_.at(i)->setZ(Rock::MIN_Y - (i * 50.0f)/*+ Utility::randMToN(-10.0f, 10.0f)*/);
+            rocks_.at(i)->setZ(Rock::MIN_Y - (i * 50.0f));
         }
         rocksSpread_ = true;
     }
 
+    if(!finished_){
     character_->setYPos(ls_->getHeightY(*character_));
 
     timer_ += 1.0f/this->fps_;
@@ -138,8 +149,17 @@ void GameManager::privateUpdate()
             float damage = rock->collide();
             if(character_->doDamage(damage) <= 0.0f){
                 finished_ = true;
+                endTime_ = timer_;
+
+                for (auto child : rocks_){
+                    this->removeSubObject(child);
+                }
+                this->removeSubObject(character_);
+                this->removeSubObject(ls_);
+                this->removeSubObject(skybox_);
             }
         }
+    }
     }
 }
 
@@ -169,4 +189,4 @@ std::shared_ptr<Shader> GameManager::getShaderPtr(std::string name){
     return ptr;
 }
 
-bool GameManager::isFinished(){return finished_;}
+bool GameManager::isFinished(){return false;}

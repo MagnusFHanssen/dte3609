@@ -50,6 +50,7 @@ void Character::privateRender()
     shader_->setMat4("projection", projectionMatrix_);
     shader_->setMat4("view", viewMatrix_);
     shader_->setMat4("model",  matrix_ * scaleRotMat_ );
+    shader_->setFloat("health", life_/maxLife_);
     shader_->disable();
 
     charModel_.draw(shader_);

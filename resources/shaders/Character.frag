@@ -9,6 +9,7 @@ out vec4 fragColor;
 
 uniform sampler2D texture_diffuse1;
 uniform vec3 lightColor;
+uniform float health;
 
 void main(void)
 {
@@ -26,5 +27,5 @@ void main(void)
 
     vec3 result = (ambient + diffuse) * texColor;
 
-    fragColor = vec4(result, 1.0);
+    fragColor = vec4(result.r, result.g * health, result.b * health, 1.0);
 }
