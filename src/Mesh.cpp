@@ -37,9 +37,9 @@ void Mesh::draw(std::shared_ptr<Shader> shader)
   }
   shader->enable();
   // draw mesh
-  glBindVertexArray(vao_);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+  glBindVertexArray(VAO_);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO_);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
   glDrawElements(GL_TRIANGLES, indices_.size(), GL_UNSIGNED_INT, 0);
 
   shader->disable();
@@ -55,15 +55,15 @@ void Mesh::draw(std::shared_ptr<Shader> shader)
 void Mesh::setupMesh()
 {
   // create buffers/arrays
-  glGenVertexArrays(1, &vao_);
-  glGenBuffers(1, &vbo_);
-  glGenBuffers(1, &ebo_);
+  glGenVertexArrays(1, &VAO_);
+  glGenBuffers(1, &VBO_);
+  glGenBuffers(1, &EBO_);
 
-  glBindVertexArray(vao_);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+  glBindVertexArray(VAO_);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO_);
   glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof(Vertex), &vertices_[0], GL_STATIC_DRAW);
 
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO_);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_.size() * sizeof(unsigned int), &indices_[0], GL_STATIC_DRAW);
 
   // vertex Positions

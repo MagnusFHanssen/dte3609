@@ -24,7 +24,9 @@ protected:
 private:
     std::shared_ptr<Shader> shader_;
 
-GLuint vertexBuffer_, vertexArray_, texture_;
+    GLuint VBO_;
+    GLuint VAO_;
+    GLuint texture_;
 
 };
 

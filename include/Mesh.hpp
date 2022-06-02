@@ -31,15 +31,15 @@ public:
   std::vector<Vertex> vertices_;
   std::vector<unsigned int> indices_;
   std::vector<Texture> textures_;
-  unsigned int vao_;
 
   // functions
   void draw(std::shared_ptr<Shader> shader);
 
 
 private:
-  unsigned int vbo_;
-  unsigned int ebo_;
+  GLuint VAO_;
+  GLuint VBO_;
+  GLuint EBO_;
 
   void setupMesh();
 

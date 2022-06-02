@@ -40,6 +40,6 @@ private:
 
   std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 
-  unsigned int textureFromFile(const char* path, const std::string &directory, bool gamma = false);
+  GLuint textureFromFile(const char* path, const std::string &directory, bool gamma = false);
 };
 

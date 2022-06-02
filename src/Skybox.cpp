@@ -61,11 +61,11 @@ void Skybox::privateInit(){
     };
 
 
-    glGenVertexArrays(1, &vertexArray_);
-    glGenBuffers(1, &vertexBuffer_);
+    glGenVertexArrays(1, &VAO_);
+    glGenBuffers(1, &VBO_);
 
-    glBindVertexArray(vertexArray_);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer_);
+    glBindVertexArray(VAO_);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_);
     glBufferData(GL_ARRAY_BUFFER, sizeof (boxVerts), &boxVerts, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof (float), (void*)0);
@@ -97,7 +97,7 @@ void Skybox::privateRender(){
     shader_->setMat4("view", viewMat);
     shader_->setMat4("projection", projectionMatrix_);
 
-    glBindVertexArray(vertexArray_);
+    glBindVertexArray(VAO_);
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture_);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
